@@ -50,8 +50,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
 	USoundBase* SpawnSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-	TSubclassOf<ADestroyedFactory> Destroyed;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* DestroyedMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	TSubclassOf<ATankPawn> SpawnTankClass;

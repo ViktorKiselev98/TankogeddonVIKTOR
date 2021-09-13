@@ -20,6 +20,10 @@ ATankFactory::ATankFactory()
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Building Mesh"));
 	BuildingMesh->SetupAttachment(SceneComp);
 
+	DestroyedMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Destroyed Mesh"));
+	DestroyedMesh->SetupAttachment(SceneComp);
+	DestroyedMesh->SetVisibility(false);
+
 	TankSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	TankSpawnPoint->AttachToComponent(SceneComp, FAttachmentTransformRules::KeepRelativeTransform);
 
@@ -34,6 +38,9 @@ ATankFactory::ATankFactory()
 void ATankFactory::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BuildingMesh->SetVisibility(true);
+	DestroyedMesh->SetVisibility(false);
 
 	if (LinkedMapLoader)
 	{
@@ -55,14 +62,11 @@ void ATankFactory::Die()
 	{
 		LinkedMapLoader->SetIsActivated(true);
 	}
-	FTransform SpawnTransform(BuildingMesh->GetComponentRotation(), BuildingMesh->GetComponentLocation());
-	ADestroyedFactory* DestroyedFac = GetWorld()->SpawnActorDeferred<ADestroyedFactory>(Destroyed, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-
-	UGameplayStatics::FinishSpawningActor(DestroyedFac, SpawnTransform);
+	BuildingMesh->SetVisibility(false);
+	DestroyedMesh->SetVisibility(true);
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestuctionParticleSystem, GetActorTransform());
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestructionSound, GetActorLocation());
-	Destroy();
 }
 
 void ATankFactory::DamageTaked(float DamageValue)
