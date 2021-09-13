@@ -45,6 +45,8 @@ protected:
 
 public:
     ATurret();
+
+    virtual void PostInitializeComponents() override;
 protected:
     virtual void BeginPlay() override;
     void Targeting();

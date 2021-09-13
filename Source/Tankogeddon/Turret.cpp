@@ -32,6 +32,10 @@ ATurret::ATurret()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
 	HealthComponent->OnDie.AddDynamic(this, &ATurret::Die);
 	HealthComponent->OnDamaged.AddDynamic(this, &ATurret::DamageTaken);
+}
+void ATurret::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 
 	UStaticMesh* TurretMeshTemp = LoadObject<UStaticMesh>(this, *TurretMeshPath);
 	if (TurretMeshTemp)
@@ -45,7 +49,6 @@ ATurret::ATurret()
 		BodyMesh->SetStaticMesh(BodyMeshTemp);
 	}
 }
-
 // Called when the game starts or when spawned
 void ATurret::BeginPlay()
 {
@@ -114,11 +117,11 @@ bool ATurret::DetectPlayerVisibility()
 	{
 		if (HitResult.Actor.Get())
 		{
-			DrawDebugLine(GetWorld(), EyesPos, HitResult.Location, FColor::Cyan, false, 0.5f, 0, 10);
+			//DrawDebugLine(GetWorld(), EyesPos, HitResult.Location, FColor::Cyan, false, 0.5f, 0, 10);
 			return HitResult.Actor.Get() == PlayerPawn;
 		}
 	}
-	DrawDebugLine(GetWorld(), EyesPos, PlayerPos, FColor::Cyan, false, 0.5f, 0, 10);
+	//DrawDebugLine(GetWorld(), EyesPos, PlayerPos, FColor::Cyan, false, 0.5f, 0, 10);
 	return false;
 }
 FVector ATurret::GetEyesPosition()
